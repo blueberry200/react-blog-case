@@ -1,0 +1,54 @@
+name: Deploy to GitHub Pages (docs on main)
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Prepare docs folder
+        run: |
+          rm -rf docs
+          mkdir docs
+          cp -r dist/* docs/
+          touch docs/.nojekyll
+
+      - name: Commit and push docs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add docs
+
+          # 如果沒有變化就不要 commit
+          if git diff --cached --quiet; then
+            echo "No changes in docs, skip commit."
+            exit 0
+          fi
+
+          git commit -m "chore: update docs for GitHub Pages [skip ci]"
+          git push
