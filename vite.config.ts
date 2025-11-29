@@ -12,5 +12,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: isProd ? "/vue-blog-case/" : "/",
+  base: isProd ? "/react-blog-case/" : "/",
 });
