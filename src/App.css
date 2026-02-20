@@ -1,42 +1,262 @@
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@import "tailwindcss";
+@import "tw-animate-css";
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.2 0 0);
+  --primary: oklab(0.49 -0.02 -0.24);
+  --primary-foreground: oklch(1 0 0);
+  --primary-hover: oklab(0.49 -0.02 -0.24);
+  --secondary: oklch(0 0 0);
+  --secondary-foreground: oklch(1 0 0);
+  --ex-cta: oklab(0.49 -0.02 -0.24);
+  --ex-cta-foreground: oklch(96.798% 0.21094 109.783);
+  --border: oklch(0.9 0 0);
+  --input: oklch(0.9 0 0);
+  --ring: oklab(0.49 -0.02 -0.24);
+  --destructive: oklch(0.61 0.27 30);
+  --muted: oklch(0.92 0.02 250);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.205 0 0);
+  --accent-foreground: oklch(0.97 0 0);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-ex-cta: var(--ex-cta);
+  --color-ex-cta-foreground: var(--ex-cta-foreground);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* ---- Page patterns ---- */
+@utility ui-page-title {
+  @apply text-2xl font-black tracking-tight leading-snug
+    sm:text-3xl
+    lg:text-4xl;
+}
+
+@utility ui-page-desc {
+  @apply text-sm leading-6 text-muted-foreground
+    sm:text-base sm:leading-7;
+}
+
+@utility flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 常用：垂直堆疊（比每次寫 flex flex-col gap-* 乾淨） */
+@utility stack {
+  @apply flex flex-col;
+}
+
+/* 常用：水平排列 */
+@utility row {
+  @apply flex flex-row;
+}
+
+/* 常用：可換行 row（tag / chip 列表很常用） */
+@utility row-wrap {
+  @apply flex flex-wrap;
+}
+
+/* 常用：inline 中心（小 icon + 文字） */
+@utility inline-center {
+  @apply inline-flex items-center;
+}
+
+@utility focus-ring {
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}
+
+@utility interactive {
+  @apply transition-colors duration-200;
+}
+
+@utility clickable {
+  @apply cursor-pointer select-none;
+}
+
+@utility disabled {
+  @apply disabled:opacity-50 disabled:pointer-events-none;
+}
+
+@utility page-container {
+  @apply mx-auto w-full max-w-7xl;
+}
+
+@utility page-padding {
+  @apply px-4 sm:px-6 lg:px-8;
+}
+
+@utility surface {
+  @apply rounded-sm sm:rounded-md md:rounded-lg lg:rounded-xl border border-border bg-background;
+}
+
+@utility divider {
+  @apply border-t border-border;
+}
+
+@layer base {
+  html {
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      "Noto Sans TC",
+      sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
   }
-  to {
-    transform: rotate(360deg);
+  body {
+    @apply bg-background text-foreground;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+  }
+  p {
+    @apply text-base leading-7;
+  }
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+  input,
+  textarea,
+  select {
+    @apply bg-background text-foreground;
+    border-color: var(--input);
+  }
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--ring);
+  }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  html.theme-switching,
+  html.theme-switching * {
+    transition-property:
+      color, background-color, border-color, fill, stroke !important;
+    transition-duration: 240ms !important;
+    transition-timing-function: ease !important;
+  }
+
+  @media (min-width: 640px) {
+    html {
+      font-size: 17px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    html {
+      font-size: 18px;
+    }
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@layer components {
+  .basic-btn {
+    @apply rounded-[10px] border-border bg-primary text-primary-foreground px-4 py-2 font-bold cursor-pointer;
+  }
+  .basic-btn:hover {
+    @apply bg-primary-hover;
+  }
+  .shell-page {
+    @apply p-6 sm:p-8 w-full;
+  }
+  .destructive-msg-block {
+    @apply w-full rounded-lg border border-destructive bg-destructive/5 p-4 text-destructive text-sm;
+  }
+  .card-wrap {
+    @apply grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] place-items-center gap-4 px-5;
+  }
+  .card {
+    @apply w-[250px] h-[340px] overflow-hidden rounded-2xl border border-slate-200 transition-all duration-200;
+    box-shadow:
+      0 1px 2px oklch(0 0 0 / 0.04),
+      0 4px 12px oklch(0 0 0 / 0.06);
+  }
+  .card:hover {
+    @apply border-slate-300 -translate-y-1 cursor-pointer;
+    box-shadow:
+      0 2px 4px oklch(0 0 0 / 0.06),
+      0 8px 24px oklch(0 0 0 / 0.1);
   }
 }
 
-.card {
-  padding: 2em;
+.rc-pagination {
+  font-size: 18px !important;
 }
 
-.read-the-docs {
-  color: #888;
-} */
+.rc-pagination .rc-pagination-options-quick-jumper input[type="text"] {
+  border: 1px solid var(--border) !important;
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+/* 頁碼 / 上一頁 / 下一頁：純文字 */
+.rc-pagination .rc-pagination-item {
+  border: none !important;
+  background: var(--background) !important;
+}
+
+.rc-pagination a {
+  color: var(--foreground) !important;
+  font-weight: 900;
+}
+
+/* 目前頁碼：primary 文字色 + 加粗 */
+.rc-pagination .rc-pagination-item-active a {
+  color: var(--primary) !important;
+  font-weight: 900;
+}
+
+.rc-pagination a:hover {
+  color: var(--primary-hover) !important;
+  font-weight: 900;
+}
+
+.rc-pagination-prev,
+.rc-pagination-next {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.rc-pagination-prev.rc-pagination-disabled,
+.rc-pagination-next.rc-pagination-disabled {
+  opacity: 0.4;
+  cursor: default;
+}
